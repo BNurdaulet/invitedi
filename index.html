@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Письмо при свече</title>
+<meta name="theme-color" content="#140d08">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Marck+Script&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="is-locked">
+
+<!-- ============ SVG-библиотека: печать, виньетки, лепестки ============ -->
+<svg class="defs" aria-hidden="true" focusable="false" width="0" height="0">
+  <defs>
+    <!-- растёкшийся край воска -->
+    <filter id="waxEdge" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="2" seed="4" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="17" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- объём по краю (свет слева сверху, со стороны свечи) -->
+    <filter id="waxRelief" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.6" result="b"/>
+      <feSpecularLighting in="b" surfaceScale="5" specularConstant=".9" specularExponent="28" lighting-color="#ffd9c0" result="s">
+        <fePointLight x="-60" y="-70" z="45"/>
+      </feSpecularLighting>
+      <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+      <feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
+    <!-- мелкая неровность поверхности воска -->
+    <filter id="waxGrain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="9" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.1  0 0 0 0 0  0 0 0 0 0.02  0 0 0 .55 -.18"/>
+      <feComposite in2="SourceAlpha" operator="in"/>
+    </filter>
+
+    <radialGradient id="waxG" cx="40%" cy="36%" r="68%">
+      <stop offset="0" stop-color="#8e1d28"/>
+      <stop offset=".45" stop-color="#6a111a"/>
+      <stop offset=".82" stop-color="#4b0a11"/>
+      <stop offset="1" stop-color="#33060b"/>
+    </radialGradient>
+    <radialGradient id="waxPress" cx="62%" cy="64%" r="62%">
+      <stop offset="0" stop-color="#7d1722"/>
+      <stop offset=".6" stop-color="#5e0f17"/>
+      <stop offset="1" stop-color="#430910"/>
+    </radialGradient>
+    <linearGradient id="rimG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0004" stop-opacity=".75"/>
+      <stop offset=".5" stop-color="#3a050b" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#ffc8bc" stop-opacity=".28"/>
+    </linearGradient>
+    <linearGradient id="letterG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7f1823"/>
+      <stop offset="1" stop-color="#5a0e16"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff" stop-opacity=".30"/>
+      <stop offset=".6" stop-color="#fff" stop-opacity=".07"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+
+    <symbol id="sealArt" viewBox="0 0 200 200">
+      <g filter="url(#waxRelief)">
+        <!-- растёкшийся воск -->
+        <g filter="url(#waxEdge)" fill="url(#waxG)">
+          <circle cx="100" cy="100" r="79"/>
+          <ellipse cx="165" cy="128" rx="17" ry="13"/>
+          <ellipse cx="38" cy="148" rx="13" ry="10"/>
+          <ellipse cx="146" cy="36" rx="14" ry="10"/>
+          <ellipse cx="62" cy="34" rx="8" ry="6"/>
+        </g>
+        <!-- вдавленная площадка от штампа -->
+        <circle cx="100" cy="100" r="60" fill="url(#waxPress)"/>
+        <circle cx="100" cy="100" r="59" fill="none" stroke="url(#rimG)" stroke-width="3.5"/>
+        <!-- выпуклое кольцо -->
+        <circle cx="101" cy="101" r="52" fill="none" stroke="#2a0307" stroke-opacity=".7" stroke-width="2.2"/>
+        <circle cx="99.3" cy="99.3" r="52" fill="none" stroke="#ffcfc4" stroke-opacity=".25" stroke-width="1.6"/>
+        <circle cx="100" cy="100" r="52" fill="none" stroke="#6c131d" stroke-width="1.6"/>
+        <!-- бисер -->
+        <circle cx="100.9" cy="100.9" r="46" fill="none" stroke="#2a0307" stroke-opacity=".65" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="0 9.032"/>
+        <circle cx="99.5" cy="99.5" r="46" fill="none" stroke="#ffd2c6" stroke-opacity=".22" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="0 9.032"/>
+        <circle cx="100" cy="100" r="46" fill="none" stroke="#701520" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="0 9.032"/>
+        <!-- инициал -->
+        <g font-family="'Old Standard TT', Georgia, serif" font-size="70" font-weight="700" text-anchor="middle">
+          <text x="101.8" y="125.6" fill="#22030a" fill-opacity=".8">Н</text>
+          <text x="99" y="123" fill="#ffcabf" fill-opacity=".3">Н</text>
+          <text x="100" y="124" fill="url(#letterG)">Н</text>
+        </g>
+        <!-- мелкие точки-завитки по сторонам -->
+        <g fill="#6e141e">
+          <circle cx="62" cy="100" r="2"/><circle cx="138" cy="100" r="2"/>
+        </g>
+      </g>
+      <g filter="url(#waxGrain)"><circle cx="100" cy="100" r="80" fill="#000"/></g>
+      <!-- блик -->
+      <ellipse cx="70" cy="58" rx="28" ry="12" transform="rotate(-38 70 58)" fill="url(#sheen)"/>
+      <path d="M40 78 A 64 64 0 0 1 78 34" fill="none" stroke="#ffe0d6" stroke-opacity=".28" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="58" cy="52" r="2" fill="#fff" fill-opacity=".35"/>
+    </symbol>
+
+    <!-- большая виньетка -->
+    <g id="vHalf" fill="none" stroke="currentColor" stroke-linecap="round">
+      <path d="M159 15 C 166 15, 170 7.5, 177.5 7.5 C 185 7.5, 187.5 15, 182 17.2 C 177.5 19, 173.5 14.6, 177.2 12.4" stroke-width="1"/>
+      <path d="M186 15 C 220 15.4, 252 13.8, 294 15" stroke-width=".9"/>
+      <path d="M192 17.2 C 218 17.8, 240 17.2, 262 16.3" stroke-width=".45" opacity=".6"/>
+      <path d="M197 14.6 C 203 8.4, 212 7.2, 219 9.2 C 213 13, 205 15, 197 14.6 Z" fill="currentColor" stroke="none"/>
+      <path d="M207 15.6 C 212 20, 220 21, 225 19.4 C 220 17, 213 16.1, 207 15.6 Z" fill="currentColor" stroke="none" opacity=".8"/>
+      <circle cx="298" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+    </g>
+    <symbol id="vignette" viewBox="0 0 300 30">
+      <use href="#vHalf"/>
+      <use href="#vHalf" transform="translate(300 0) scale(-1 1)"/>
+      <path d="M150 7.5 L155.5 15 L150 22.5 L144.5 15 Z" fill="currentColor"/>
+      <path d="M150 11 L152.6 15 L150 19 L147.4 15 Z" fill="#e9dcc0" opacity=".55"/>
+      <circle cx="150" cy="3.4" r="1.1" fill="currentColor"/>
+      <circle cx="150" cy="26.6" r="1.1" fill="currentColor"/>
+    </symbol>
+    <symbol id="vMini" viewBox="0 0 120 12">
+      <g stroke="currentColor" stroke-linecap="round" fill="none">
+        <path d="M14 6 C 30 6.4, 40 5.6, 51 6" stroke-width=".7"/>
+        <path d="M69 6 C 80 5.6, 90 6.4, 106 6" stroke-width=".7"/>
+      </g>
+      <path d="M60 2.2 L63.6 6 L60 9.8 L56.4 6 Z" fill="currentColor"/>
+      <circle cx="54" cy="6" r=".9" fill="currentColor"/><circle cx="66" cy="6" r=".9" fill="currentColor"/>
+    </symbol>
+
+    <!-- лепестки -->
+    <linearGradient id="petalA" x1="0" y1="1" x2=".3" y2="0">
+      <stop offset="0" stop-color="#4f0a14"/>
+      <stop offset=".35" stop-color="#7d1222"/>
+      <stop offset=".8" stop-color="#9b1b2d"/>
+      <stop offset="1" stop-color="#861627"/>
+    </linearGradient>
+    <linearGradient id="petalB" x1="0" y1="1" x2=".2" y2="0">
+      <stop offset="0" stop-color="#5e0f17"/>
+      <stop offset=".45" stop-color="#8c1a26"/>
+      <stop offset="1" stop-color="#a5303a"/>
+    </linearGradient>
+    <symbol id="petal1" viewBox="0 0 40 50">
+      <path d="M20 48 C 6 40, 0 25, 5 13 C 9 4, 17 2, 20 8 C 23 2, 31 4, 35 13 C 40 25, 34 40, 20 48 Z" fill="url(#petalA)"/>
+      <path d="M20 46 C 19 34, 18 22, 20 10" stroke="#2c0207" stroke-opacity=".25" stroke-width=".8" fill="none"/>
+      <path d="M8 16 C 12 10, 16 9, 19 12" stroke="#ffd6d6" stroke-opacity=".12" stroke-width="1.4" fill="none"/>
+    </symbol>
+    <symbol id="petal2" viewBox="0 0 40 50">
+      <path d="M21 49 C 9 43, 2 30, 4 17 C 6 7, 14 1, 22 3 C 31 5, 38 14, 36 26 C 34 38, 28 45, 21 49 Z" fill="url(#petalB)"/>
+      <path d="M21 47 C 20 36, 21 22, 23 8" stroke="#2c0207" stroke-opacity=".22" stroke-width=".8" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ Стол, свет, тень ============ -->
+<div class="table" aria-hidden="true"></div>
+<div class="light" aria-hidden="true"></div>
+<div class="shade" aria-hidden="true"></div>
+
+<main class="scene">
+
+  <div class="window" aria-hidden="true">
+    <div class="sky"></div>
+    <div class="moon"></div>
+    <div class="mullions"></div>
+  </div>
+
+  <div class="candle" role="button" tabindex="0" aria-label="Задуть свечу" title="Задуть свечу">
+    <div class="candle-light"></div>
+
+    <!-- пламя: под телом свечи, чтобы фитиль был виден силуэтом -->
+    <div class="flame-wrap">
+      <svg class="flame-svg" viewBox="0 0 24 66">
+        <defs>
+          <filter id="fSoft1" x="-60%" y="-30%" width="220%" height="160%"><feGaussianBlur stdDeviation="1.3"/></filter>
+          <filter id="fSoft2" x="-60%" y="-30%" width="220%" height="160%"><feGaussianBlur stdDeviation=".75"/></filter>
+          <filter id="fSoft3" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation=".55"/></filter>
+          <radialGradient id="flOuter" cx="50%" cy="72%" r="62%">
+            <stop offset="0" stop-color="#ffe7ad"/>
+            <stop offset=".45" stop-color="#ffc062"/>
+            <stop offset=".78" stop-color="#ee8a2e" stop-opacity=".8"/>
+            <stop offset="1" stop-color="#d9661e" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="flBody" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffcf78" stop-opacity=".2"/>
+            <stop offset=".22" stop-color="#ffe2a0"/>
+            <stop offset=".55" stop-color="#fff6dc"/>
+            <stop offset=".8" stop-color="#fffbf0"/>
+            <stop offset="1" stop-color="#ffe9c0" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="flCore" cx="50%" cy="60%" r="50%">
+            <stop offset="0" stop-color="#b8662a" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#d98a40" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- внешняя оранжевая оболочка -->
+        <path filter="url(#fSoft1)" fill="url(#flOuter)"
+          d="M12 1.5 C13.2 11, 20.5 24, 20.6 40 C20.7 52, 17 62.5, 12 62.5 C7 62.5, 3.3 52, 3.4 40 C3.5 24, 10.8 11, 12 1.5 Z"/>
+        <!-- светящаяся зона -->
+        <path filter="url(#fSoft2)" fill="url(#flBody)"
+          d="M12 9 C12.9 18, 18 29, 18 42 C18 51.5, 15.4 57.5, 12 57.5 C8.6 57.5, 6 51.5, 6 42 C6 29, 11.1 18, 12 9 Z"/>
+        <!-- тёмная внутренняя зона вокруг фитиля -->
+        <ellipse filter="url(#fSoft2)" fill="url(#flCore)" cx="12" cy="51" rx="3.4" ry="8"/>
+        <!-- синее основание -->
+        <path filter="url(#fSoft3)" fill="#4a68c8" fill-opacity=".72"
+          d="M4.6 54 C5 60.5, 8 64.2, 12 64.2 C16 64.2, 19 60.5, 19.4 54 C17.2 58.6, 14.6 60.6, 12 60.6 C9.4 60.6, 6.8 58.6, 4.6 54 Z"/>
+        <ellipse filter="url(#fSoft2)" fill="#2c3f9a" fill-opacity=".3" cx="12" cy="61" rx="6" ry="3"/>
+      </svg>
+    </div>
+
+    <svg class="candle-body" viewBox="0 0 180 320">
+      <defs>
+        <filter id="cBlur4" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="cBlur15" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.5"/></filter>
+        <filter id="cBlur04"><feGaussianBlur stdDeviation=".45"/></filter>
+        <filter id="dripShadow" x="-30%" y="-10%" width="160%" height="130%">
+          <feDropShadow dx=".7" dy=".9" stdDeviation=".6" flood-color="#3c2810" flood-opacity=".35"/>
+        </filter>
+        <!-- шероховатость воска -->
+        <filter id="waxNoise" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/>
+          <feColorMatrix type="matrix" values="0 0 0 0 .35  0 0 0 0 .27  0 0 0 0 .16  .5 0 0 0 -.22"/>
+        </filter>
+        <!-- патина на латуни -->
+        <filter id="patina" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency=".09 .3" numOctaves="3" seed="21" result="n"/>
+          <feColorMatrix in="n" type="matrix" values="0 0 0 0 .12  0 0 0 0 .09  0 0 0 0 .04  1.3 0 0 0 -.62" result="p"/>
+          <feComposite in="p" in2="SourceAlpha" operator="in" result="pi"/>
+          <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="pi"/></feMerge>
+        </filter>
+
+        <linearGradient id="waxCyl" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#a99a7c"/>
+          <stop offset=".16" stop-color="#ddd1b8"/>
+          <stop offset=".38" stop-color="#f3ecdc"/>
+          <stop offset=".6" stop-color="#e8dcc4"/>
+          <stop offset=".84" stop-color="#bfae8e"/>
+          <stop offset="1" stop-color="#8c7c60"/>
+        </linearGradient>
+        <linearGradient id="waxDrip" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#cfc1a4"/>
+          <stop offset=".42" stop-color="#faf4e6"/>
+          <stop offset=".72" stop-color="#e0d3b9"/>
+          <stop offset="1" stop-color="#ae9d7d"/>
+        </linearGradient>
+        <!-- воск просвечивает у пламени -->
+        <linearGradient id="waxGlowG" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="90" y2="190">
+          <stop offset="0" stop-color="#ff9a40" stop-opacity=".62"/>
+          <stop offset=".22" stop-color="#ffae58" stop-opacity=".3"/>
+          <stop offset=".55" stop-color="#ffb868" stop-opacity=".08"/>
+          <stop offset="1" stop-color="#ffb868" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="waxDown" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="120" y2="256">
+          <stop offset="0" stop-color="#000" stop-opacity="0"/>
+          <stop offset="1" stop-color="#2a1a0a" stop-opacity=".28"/>
+        </linearGradient>
+        <radialGradient id="poolG" cx="50%" cy="45%" r="60%">
+          <stop offset="0" stop-color="#ffd9a0"/>
+          <stop offset=".6" stop-color="#f6dfb4"/>
+          <stop offset="1" stop-color="#e2cca2"/>
+        </radialGradient>
+        <linearGradient id="puddleG" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#b4a585"/>
+          <stop offset=".4" stop-color="#ece2cc"/>
+          <stop offset="1" stop-color="#a49373"/>
+        </linearGradient>
+
+        <linearGradient id="brassCyl" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#3a2a15"/>
+          <stop offset=".18" stop-color="#7d6239"/>
+          <stop offset=".34" stop-color="#c9a96e"/>
+          <stop offset=".46" stop-color="#9c7c4c"/>
+          <stop offset=".78" stop-color="#5a4224"/>
+          <stop offset="1" stop-color="#2e2110"/>
+        </linearGradient>
+        <radialGradient id="dishTop" cx="48%" cy="38%" r="62%">
+          <stop offset="0" stop-color="#b7955d"/>
+          <stop offset=".4" stop-color="#9c7c4c"/>
+          <stop offset=".75" stop-color="#735733"/>
+          <stop offset="1" stop-color="#4a3720"/>
+        </radialGradient>
+        <radialGradient id="dishWell" cx="50%" cy="20%" r="80%">
+          <stop offset="0" stop-color="#a88a55"/>
+          <stop offset=".5" stop-color="#7b5f38"/>
+          <stop offset="1" stop-color="#55402a"/>
+        </radialGradient>
+        <linearGradient id="dishEdge" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#8b6d40"/>
+          <stop offset=".45" stop-color="#5e4626"/>
+          <stop offset="1" stop-color="#2b1e0e"/>
+        </linearGradient>
+        <linearGradient id="ringG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#c3a368"/>
+          <stop offset=".5" stop-color="#7a5e36"/>
+          <stop offset="1" stop-color="#3b2b16"/>
+        </linearGradient>
+
+        <clipPath id="waxClip">
+          <path d="M62 252 L62 101 C62 96.5 63.6 93 66.5 92 C69.5 91.2 71.2 94.2 73.6 95.4 C77 97 82 96.2 86 95.6 C89.6 95.2 92 97.4 93.2 100.4 C93.8 102 94 104 94 106 L94 252 Z"/>
+          <path d="M62.6 102 C60.2 108 59.6 118 59.8 130 C60 138 59.4 146 60.6 149.5 C61.8 152.4 64.6 151.6 64.8 147.6 C65 140 64.4 128 64.8 118 C65 111 65.6 106 66 101 Z"/>
+          <path d="M93.6 104 C96.4 116 96 140 95.8 165 C95.6 185 96.6 200 95.6 207.5 C94.8 212 91.2 211.6 91 206.5 C90.8 196 91.6 180 91.6 160 C91.6 136 90.8 116 90.6 102 Z"/>
+          <path d="M77.5 99.5 C78.6 106 77.4 114 77.6 121 C77.7 126 79.4 128.6 81 127.8 C82.6 127 82.6 122 82.2 117 C81.8 111 81.4 105 82 99.5 Z"/>
+        </clipPath>
+      </defs>
+
+      <!-- тень на столе под подсвечником -->
+      <ellipse cx="80" cy="295" rx="80" ry="15" fill="#000" fill-opacity=".62" filter="url(#cBlur4)"/>
+
+      <!-- ручка-кольцо -->
+      <g filter="url(#patina)">
+        <path d="M140 281.5 L151 280 L151.5 287.5 L140 289 Z" fill="url(#ringG)"/>
+        <ellipse cx="160" cy="284.5" rx="12" ry="8" fill="none" stroke="#2a1d0d" stroke-width="5.4"/>
+        <ellipse cx="160" cy="284" rx="12" ry="8" fill="none" stroke="url(#ringG)" stroke-width="4"/>
+        <path d="M150.5 278 C 150 273, 156 270.5, 162 271.5 C 166 272.2, 167 274, 165 275 C 161 274.2, 156 275, 153.5 278.5 Z" fill="url(#ringG)"/>
+      </g>
+
+      <!-- тарелка подсвечника -->
+      <g filter="url(#patina)">
+        <ellipse cx="78" cy="288" rx="74" ry="16.5" fill="url(#dishEdge)"/>
+        <ellipse cx="78" cy="283.5" rx="74" ry="16" fill="url(#dishTop)"/>
+        <ellipse cx="78" cy="284.4" rx="63" ry="12.4" fill="url(#dishWell)"/>
+        <path d="M4.6 284 C 10 294, 40 299.4, 78 299.4 C 116 299.4, 146 294, 151.4 284" fill="none" stroke="#d6b77c" stroke-opacity=".45" stroke-width="1"/>
+        <path d="M15 285 C 25 291.4, 50 296, 78 296 C 106 296, 131 291.4, 141 285" fill="none" stroke="#2a1c0c" stroke-opacity=".35" stroke-width="1.2"/>
+      </g>
+      <!-- отражение пламени в латуни -->
+      <ellipse cx="78" cy="278.5" rx="22" ry="4.2" fill="#ffc77a" fill-opacity=".38" filter="url(#cBlur15)" class="brass-glint"/>
+
+      <!-- воск -->
+      <path d="M62 252 L62 101 C62 96.5 63.6 93 66.5 92 C69.5 91.2 71.2 94.2 73.6 95.4 C77 97 82 96.2 86 95.6 C89.6 95.2 92 97.4 93.2 100.4 C93.8 102 94 104 94 106 L94 252 Z" fill="url(#waxCyl)"/>
+      <g filter="url(#dripShadow)" fill="url(#waxDrip)">
+        <path d="M62.6 102 C60.2 108 59.6 118 59.8 130 C60 138 59.4 146 60.6 149.5 C61.8 152.4 64.6 151.6 64.8 147.6 C65 140 64.4 128 64.8 118 C65 111 65.6 106 66 101 Z"/>
+        <path d="M93.6 104 C96.4 116 96 140 95.8 165 C95.6 185 96.6 200 95.6 207.5 C94.8 212 91.2 211.6 91 206.5 C90.8 196 91.6 180 91.6 160 C91.6 136 90.8 116 90.6 102 Z"/>
+        <path d="M77.5 99.5 C78.6 106 77.4 114 77.6 121 C77.7 126 79.4 128.6 81 127.8 C82.6 127 82.6 122 82.2 117 C81.8 111 81.4 105 82 99.5 Z"/>
+      </g>
+      <g clip-path="url(#waxClip)">
+        <rect x="55" y="88" width="45" height="168" filter="url(#waxNoise)"/>
+        <rect x="55" y="88" width="45" height="168" fill="url(#waxDown)"/>
+        <rect x="55" y="88" width="45" height="168" fill="url(#waxGlowG)" class="wax-glow"/>
+      </g>
+      <!-- блики на подтёках -->
+      <g fill="none" stroke="#fff" stroke-linecap="round" stroke-opacity=".5" stroke-width=".7">
+        <path d="M79 105 C79.4 111 78.8 117 79.1 123"/>
+        <path d="M61.6 112 C61.2 122 61.3 134 61.6 146"/>
+        <path d="M92.6 120 C93 140 92.8 170 92.6 200" stroke-opacity=".3"/>
+      </g>
+      <!-- лужица расплавленного воска и тонкий просвечивающий край -->
+      <path d="M66 95.6 C70 97.6, 74 98.8, 78 98.8 C83 98.8, 88 98, 91.5 99 C88 101.6, 83 102.4, 78 102.4 C72 102.4, 67.5 100, 66 95.6 Z" fill="url(#poolG)"/>
+      <path class="wax-glow" filter="url(#cBlur04)" d="M62.4 101 C62.4 96.5 63.8 93.2 66.5 92.3 C69.5 91.5 71.2 94.5 73.6 95.7 C77 97.3 82 96.5 86 95.9 C89.6 95.5 92 97.7 93.2 100.6" fill="none" stroke="#ffcf8a" stroke-opacity=".9" stroke-width="1.4"/>
+
+      <!-- фитиль: обугленный, загнутый, с тлеющим кончиком -->
+      <path d="M78.4 99 C78.2 94, 78.6 89, 80.4 84" fill="none" stroke="#1a110a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M78.6 98.5 C78.5 95.5, 78.6 93, 78.9 91" fill="none" stroke="#6a5a48" stroke-width="1" stroke-linecap="round" stroke-opacity=".6"/>
+      <circle class="ember" cx="80.5" cy="83.8" r="1.4" fill="#d2561c"/>
+      <circle class="ember" cx="80.5" cy="83.6" r=".65" fill="#ffb35c"/>
+
+      <!-- гильза подсвечника -->
+      <g filter="url(#patina)">
+        <path d="M57 252 C57 262 59 270 62.5 276.5 L93.5 276.5 C97 270 99 262 99 252 Z" fill="url(#brassCyl)"/>
+        <ellipse cx="78" cy="252" rx="21" ry="4.4" fill="none" stroke="url(#brassCyl)" stroke-width="2.4"/>
+        <ellipse cx="78" cy="277" rx="20" ry="4.2" fill="url(#brassCyl)"/>
+        <path d="M58.4 277.6 C 62 280.6, 70 281.6, 78 281.6 C 86 281.6, 94 280.6, 97.6 277.6" fill="none" stroke="#1e1408" stroke-opacity=".5" stroke-width="1"/>
+        <path d="M64 254 C 64.6 262, 66 270, 68 275.6" fill="none" stroke="#f0d49a" stroke-opacity=".35" stroke-width="1.4"/>
+      </g>
+      <!-- воск, натёкший на край гильзы -->
+      <path d="M59 251 C61 248.6 66 248.4 70 249 C76 249.8 84 248.6 90 248.8 C95 249 98.4 250.2 98 252.4 C97.6 254.4 95 255 93.4 254.6 C92.6 257.6 90.6 258 90 255.4 C85 255.6 78 256 70 255.8 C64 255.6 58 254 59 251 Z" fill="url(#puddleG)" filter="url(#dripShadow)"/>
+    </svg>
+
+    <!-- дым после угасания -->
+    <svg class="smoke" viewBox="0 0 180 320" aria-hidden="true">
+      <defs>
+        <filter id="smokeSoft" filterUnits="userSpaceOnUse" x="0" y="-220" width="180" height="320"><feGaussianBlur stdDeviation=".9"/></filter>
+        <linearGradient id="smokeG" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="84" y2="-110">
+          <stop offset="0" stop-color="#e2ded6" stop-opacity=".95"/>
+          <stop offset=".35" stop-color="#d2cec8" stop-opacity=".6"/>
+          <stop offset="1" stop-color="#a9a6a0" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g fill="none" stroke="url(#smokeG)" stroke-linecap="round" stroke-linejoin="round" filter="url(#smokeSoft)">
+        <path stroke-width="1.3" d=""/>
+        <path stroke-width="3.4" stroke-opacity=".45" d=""/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ============ Конверт ============ -->
+  <section class="env-stage">
+    <div class="envelope" role="button" tabindex="0" aria-label="Сломать печать и вскрыть конверт">
+      <div class="env-shadow"></div>
+      <div class="env-back"></div>
+      <div class="insert"></div>
+      <div class="env-front">
+        <svg class="env-folds" viewBox="0 0 142 100" preserveAspectRatio="none" aria-hidden="true">
+          <polygon points="0,0 71,46 0,100" fill="rgba(60,35,10,.07)"/>
+          <polygon points="142,0 71,46 142,100" fill="rgba(60,35,10,.11)"/>
+          <polygon points="0,100 71,52 142,100" fill="rgba(255,246,226,.10)"/>
+          <path d="M0,0 L71,46 L142,0" fill="none" stroke="rgba(50,30,10,.18)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <path d="M0,100 L71,52 L142,100" fill="none" stroke="rgba(50,30,10,.30)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <path d="M1,99.2 L71,51.2 L141,99.2" fill="none" stroke="rgba(255,250,236,.45)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="env-address">
+          <p class="addr-to">Миледи <span data-field="guestName">Диана</span> — в собственные руки.</p>
+          <p class="addr-note">Сие послание доверено ночному ветру и не терпит чужих глаз.</p>
+        </div>
+      </div>
+      <div class="flap-shadow"></div>
+      <div class="env-flap"></div>
+      <div class="seal">
+        <div class="seal-half left"><svg viewBox="0 0 200 200"><use href="#sealArt"/></svg></div>
+        <div class="seal-half right"><svg viewBox="0 0 200 200"><use href="#sealArt"/></svg></div>
+        <svg class="crack" viewBox="0 0 200 200" aria-hidden="true">
+          <path d="M104 0 L104 18 L94 50 L110 72 L92 100 L108 128 L96 156 L106 184 L106 200" pathLength="1"/>
+          <path d="M110 72 L123 79 L131 76" pathLength="1"/>
+          <path d="M92 100 L80 107 L74 118" pathLength="1"/>
+          <path d="M96 156 L86 162" pathLength="1"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Письмо ============ -->
+  <article class="letter" hidden>
+    <div class="unfold">
+      <div class="paper-shadow"></div>
+      <div class="paper">
+        <div class="letter-text">
+          <p class="salutation"><span class="dropcap" data-noink><svg class="dropcap-frame" viewBox="0 0 100 100" aria-hidden="true">
+              <rect x="2.5" y="2.5" width="95" height="95" fill="rgba(156,124,76,.07)" stroke="currentColor" stroke-width="1.3"/>
+              <rect x="7.5" y="7.5" width="85" height="85" fill="none" stroke="currentColor" stroke-width=".6"/>
+              <g fill="none" stroke="currentColor" stroke-linecap="round">
+                <path d="M15 86 C 24 72, 16 60, 28 50 C 40 41, 32 28, 46 20 C 58 13, 72 22, 84 15" stroke-width=".8" opacity=".55"/>
+                <path d="M28 50 C 22 46, 20 40, 24 36" stroke-width=".6" opacity=".5"/>
+                <path d="M46 20 C 50 26, 58 27, 61 23" stroke-width=".6" opacity=".5"/>
+                <path d="M84 15 C 88 22, 84 28, 79 27" stroke-width=".6" opacity=".5"/>
+              </g>
+              <g fill="currentColor" opacity=".5">
+                <ellipse cx="20" cy="70" rx="4.5" ry="1.8" transform="rotate(-55 20 70)"/>
+                <ellipse cx="36" cy="40" rx="4.5" ry="1.8" transform="rotate(-30 36 40)"/>
+                <ellipse cx="66" cy="17" rx="4.5" ry="1.8" transform="rotate(15 66 17)"/>
+                <ellipse cx="76" cy="84" rx="4" ry="1.6" transform="rotate(-20 76 84)"/>
+                <ellipse cx="86" cy="70" rx="3.5" ry="1.4" transform="rotate(-70 86 70)"/>
+              </g>
+              <g fill="currentColor">
+                <path d="M50 2.5 L53 5 L50 7.5 L47 5 Z"/><path d="M50 92.5 L53 95 L50 97.5 L47 95 Z"/>
+                <path d="M2.5 50 L5 47 L7.5 50 L5 53 Z"/><path d="M92.5 50 L95 47 L97.5 50 L95 53 Z"/>
+                <circle cx="12.5" cy="12.5" r="1.6"/><circle cx="87.5" cy="12.5" r="1.6"/>
+                <circle cx="12.5" cy="87.5" r="1.6"/><circle cx="87.5" cy="87.5" r="1.6"/>
+              </g>
+            </svg><span class="dropcap-letter">М</span></span><span data-ink>илостивая государыня!</span></p>
+
+          <p data-ink>Бывают ночи, когда завеса между миром земным и миром горним истончается до прозрачности, и душа человеческая, дрожа, как пламя свечи на сквозняке, вдруг постигает то, что днём сокрыто от неё суетою. Именно в такую ночь я дерзнул взяться за перо.</p>
+
+          <p data-ink>Я знаю, о, я слишком хорошо знаю, сколь безмерна пропасть, разделяющая скромного первокурсника и Вас, чей второй год учения сияет, подобно Мицару, той дивной звезде, что, как открывается лишь зоркому взору, вовсе не одинока, но сопровождаема верной спутницей! Целый год мудрости и опыта лежит меж нами, и мудрый осудил бы мою дерзость. Но разве мудрость когда-либо была властна над велениями Судьбы?</p>
+
+          <p data-ink>Ибо звёзды, эти древние и безмолвные свидетели вечности, сошлись нынче в редком и таинственном согласии, указав огненным перстом на один-единственный вечер. Клуб «Puzzle», собрание душ, скреплённых незримыми нитями, готовится к торжеству, и было бы преступлением против самого мироздания, если бы среди нас недоставало Вас.</p>
+
+          <p data-ink class="omen">Не сочтите это письмо прихотью. Сочтите его знамением.</p>
+        </div>
+
+        <section class="evening">
+          <svg class="vignette reveal" aria-hidden="true"><use href="#vignette"/></svg>
+          <h2 class="reveal">Порядок вечера</h2>
+          <dl class="order">
+            <div class="order-item reveal">
+              <dt>Когда звёзды укажут час:</dt>
+              <dd><span data-field="date">05.12.2026</span>, в <span data-field="time">18:00</span></dd>
+            </div>
+            <svg class="vmini reveal" aria-hidden="true"><use href="#vMini"/></svg>
+            <div class="order-item reveal">
+              <dt>Где свершится предначертанное:</dt>
+              <dd><span data-field="place">Скажут</span></dd>
+            </div>
+            <svg class="vmini reveal" aria-hidden="true"><use href="#vMini"/></svg>
+            <div class="order-item reveal">
+              <dt>Облачение:</dt>
+              <dd><span data-field="dressCode">Подберем вместе</span> </dd>
+            </div>
+            <svg class="vmini reveal" aria-hidden="true"><use href="#vMini"/></svg>
+            <div class="order-item reveal">
+              <dt>Что ожидает Вас:</dt>
+              <dd>игры, смех и беседы, достойные того, чтобы о них помнили и через сто лет</dd>
+            </div>
+          </dl>
+          <svg class="vignette reveal" aria-hidden="true"><use href="#vignette"/></svg>
+        </section>
+
+        <div class="actions reveal">
+          <button type="button" class="btn btn-yes">Я внемлю зову звёзд</button>
+          <button type="button" class="btn btn-no">Увы, судьба моя иная…</button>
+        </div>
+
+        <div class="reply reply-yes" hidden aria-live="polite">
+          <p>О, благословенный миг! Я слышу, как где-то в вышине ангелы откладывают свои арфы, дабы рукоплескать! Ваше согласие озарило сей унылый ноябрь светом, какого не знали и летние зори.</p>
+          <p>Да хранят Вас звёзды до нашей встречи.</p>
+        </div>
+
+        <div class="reply reply-no" hidden aria-live="polite">
+          <p>Так, значит, небеса ошиблись?.. Нет! Небеса не ошибаются. Ошибаемся лишь мы, смертные, когда отворачиваемся от начертанного для нас.</p>
+          <p>Я не смею настаивать. Но знайте: в тот вечер одно место останется пустым, и ветер будет шептать над ним Ваше имя.</p>
+          <p>…Быть может, сердце Ваше ещё смягчится?</p>
+        </div>
+
+        <footer class="signature reveal">
+          <span class="sig-line">Остаюсь в трепетном ожидании,</span>
+          <span class="sig-line">покорный слуга Ваш и первокурсник</span>
+          <span class="sig-line sig-name" data-field="signer">Нурда</span>
+          <span class="sig-line sig-note">Писано при свече, в час, когда спят даже совы</span>
+        </footer>
+      </div>
+    </div>
+  </article>
+</main>
+
+<button type="button" class="skip" hidden>пропустить анимацию</button>
+<div class="moonwash" aria-hidden="true"></div>
+<div class="moonbeam" aria-hidden="true"><div class="pane-light"></div></div>
+<div class="petals" aria-hidden="true"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
