@@ -1,0 +1,13 @@
+{
+  "name": "invitedi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Приглашение: письмо при свече",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
