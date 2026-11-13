@@ -1,0 +1,4 @@
+# Plain static site (HTML/CSS/JS at the repository root) — no build step needed.
+[build]
+  publish = "."
+  command = ""
